@@ -1,6 +1,7 @@
 package com.codewithmosh.store.controllers;
 
 import com.codewithmosh.store.dtos.RegisterUserRequest;
+import com.codewithmosh.store.dtos.UpdateUserRequest;
 import com.codewithmosh.store.dtos.UserDto;
 import com.codewithmosh.store.entities.User;
 import com.codewithmosh.store.mappers.UserMapper;
@@ -25,10 +26,7 @@ public class UserController {
     @GetMapping
     // method: GET
     public Iterable<UserDto> getAllUsers(
-            @RequestHeader(required = false, name = "x-auth-token") String authToken,
-            @RequestParam(required = false, defaultValue = "", name = "sort") String sort
-    ) {
-        System.out.println(authToken);
+            @RequestParam(required = false, defaultValue = "", name = "sort") String sort) {
         if(!Set.of("name", "email").contains(sort)) {
             sort = "name";
         }
@@ -59,4 +57,20 @@ public class UserController {
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable(name = "id") Long id,
+            @RequestBody UpdateUserRequest request){
+        var user = userRepository.findById(id).orElse(null);
+        if(user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userMapper.update(request,user);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(userMapper.toDto(user));
+    }
+
 }
