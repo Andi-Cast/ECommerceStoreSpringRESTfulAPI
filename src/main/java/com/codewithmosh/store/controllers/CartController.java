@@ -7,6 +7,9 @@ import com.codewithmosh.store.dtos.UpdateCartItemRequest;
 import com.codewithmosh.store.exceptions.CartNotFoundException;
 import com.codewithmosh.store.exceptions.ProductNotFoundException;
 import com.codewithmosh.store.services.CartService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +25,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/carts")
+@Tag(name = "Carts")
 public class CartController {
 
     private final CartService cartService;
 
     @PostMapping
+    @Operation(summary = "Generate new cart.")
     public ResponseEntity<CartDto> createCart(
             UriComponentsBuilder uriComponentsBuilder
     ) {
@@ -37,7 +42,9 @@ public class CartController {
     }
 
     @PostMapping("/{cartId}/items")
+    @Operation(summary = "Add item to cart.")
     public ResponseEntity<CartItemDto> addItemToCart(
+            @Parameter(description = "Cart id.")
             @PathVariable(name = "cartId") UUID cartId,
             @RequestBody AddItemToCartRequest request
     ) {
