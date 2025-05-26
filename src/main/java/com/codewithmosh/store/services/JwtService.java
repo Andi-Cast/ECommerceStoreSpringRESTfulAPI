@@ -18,7 +18,19 @@ public class JwtService {
 
     final long tokenExpiration = 86400;  //1 day
 
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
+        final long tokenExpiration = 300; //5m
+
+        return generateAccessToken(user, tokenExpiration);
+    }
+
+    public String generateFreshToken(User user) {
+        final long tokenExpiration = 604800; //7d
+
+        return generateAccessToken(user, tokenExpiration);
+    }
+
+    private String generateAccessToken(User user, long tokenExpiration) {
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())
@@ -27,7 +39,6 @@ public class JwtService {
                 .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
-
     }
 
     public boolean validateToken(String token) {
