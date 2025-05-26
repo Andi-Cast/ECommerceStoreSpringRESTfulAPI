@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-@ToString
 public class Jwt {
     private final Claims claims;
     private final SecretKey secretKey;
