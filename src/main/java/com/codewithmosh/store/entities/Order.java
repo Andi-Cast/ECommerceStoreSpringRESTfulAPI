@@ -31,12 +31,12 @@ public class Order {
     private OrderStatus status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "total_price", insertable = false, updatable = false)
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @OneToMany(mappedBy = "order")
-    private Set<OrderItem> Items = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+    private Set<OrderItem> items = new LinkedHashSet<>();
 }
