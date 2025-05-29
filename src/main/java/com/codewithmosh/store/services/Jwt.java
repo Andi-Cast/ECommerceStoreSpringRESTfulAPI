@@ -1,15 +1,13 @@
 package com.codewithmosh.store.services;
 
-import com.codewithmosh.store.entities.Role;
+import com.codewithmosh.store.users.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
-import lombok.ToString;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.List;
 
 @AllArgsConstructor
 public class Jwt {
